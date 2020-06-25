@@ -1,50 +1,60 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+import tkinter as tk
 import random
 
-def IsInt(x):
-    try:
-        int(x)
-        return True
-    except ValueError:
-        return False
+# dict of possible options
+options = {1:"Rock", 2:"Paper", 3:"Scissor"}
 
-def main():
-    # dict of possible options
-    options = {1:"Rock", 2:"Paper", 3:"Scissor"}
+# 1: win, 0: draw, -1: loose
+rules = {1:{1: 0, 2:-1, 3: 1},
+         2:{1: 1, 2: 0, 3:-1},
+         3:{1:-1, 2: 1, 3: 0}}
 
-    # 1: win, 0: draw, -1: loose
-    rules = {1:{1: 0, 2:-1, 3: 1},
-             2:{1: 1, 2: 0, 3:-1},
-             3:{1:-1, 2: 1, 3: 0}}
-
-    user = 0
-
-    while True:
-        # get user input
-        user = input("Rock(1), Paper(2) or Scissor(3)?\n")
-        # check if input represents integer
-        if IsInt(user):
-            user = int(user)
-            # check if input is in valid range [1-3]
-            if user >= 1 and user <=3:
-                break
-        print("Input not valid. Try again.")
+def battle(user):
+    '''ToDo.'''
 
     # random choice of opponent
     opponent = random.randint(1,3)
 
-    print("You chose {0}.".format(options[user]))
-    print("CPU chose {0}.".format(options[opponent]))
+    overview = "You chose {0}.\nCPU chose {1}.\n".format(options[user],
+                                                       options[opponent])
 
+    # determine winner
     outcome = rules[user][opponent]
 
-    if   outcome ==  1:
-        print("You won! :)")
+    result = ""
+    if outcome ==  1:
+        result = "You won! :)\n"
     elif outcome ==  0:
-        print("It's a draw. :/")
+        result = "It's a draw. :/\n"
     elif outcome == -1:
-        print("You lost. :(")
+        result = "You lost. :(\n"
 
-if __name__ == "__main__":
-    main()
+    label_result.config(text=overview+result)
+
+
+root = tk.Tk()
+# set title
+root.title("RockPaperScissor")
+
+# rock button
+btn_rock= tk.Button(root, text ="Rock", height=7, width=20,
+                    command=lambda:battle(1))
+btn_rock.grid(row=3,column=0)
+
+# paper button
+btn_paper = tk.Button(root, text="Paper", height=7, width=20,
+                      command=lambda:battle(2))
+btn_paper.grid(row=3,column=1)
+
+# scissor button
+btn_scissor = tk.Button(root, text="Scissor", height=7, width=20,
+                        command=lambda:battle(3))
+btn_scissor.grid(row=3,column=2)
+
+message = ""
+label_result = tk.Label(root, text=message)
+label_result.grid()
+
+root.mainloop()
